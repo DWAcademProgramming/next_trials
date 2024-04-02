@@ -1,8 +1,15 @@
 import React from 'react'; 
-import properties from '@/properties.json'; 
 import PropertyCard from '@/components/PropertyCard';
+import { fetchProperties } from '@/utils/requests';
 
-const PropertiesPage = () => {
+
+const PropertiesPage = async () => {
+  const properties = await fetchProperties(); 
+
+  // Sort properties by date
+  properties.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); 
+
+
   return (
     <div>
       <section class="px-4 py-6">
@@ -10,7 +17,7 @@ const PropertiesPage = () => {
           {properties.length === 0 ? (
             <p>No properties found</p>
           ) : (
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               { properties.map((property) => (
                 <PropertyCard key={property._id} property={property} />
               ))}
